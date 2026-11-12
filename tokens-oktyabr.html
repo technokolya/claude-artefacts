@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Расход токенов, октябрь</title>
+<style>
+:root{
+  --bg:#F4F5F7; --surface:#FFFFFF; --ink:#151824; --muted:#5B6070; --line:#DCDFE6;
+  --accent:#2C47C9; --accent-soft:#E6EAFB;
+  --good:#1E7A4C; --good-bg:#DCF1E4; --warn:#96580A; --warn-bg:#FBECD0;
+  --bad:#B42318; --bad-bg:#FBE2DF; --unk:#5B6070; --unk-bg:#E8E9EF; --off:#E2E4EB;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --body:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0F1117; --surface:#171A23; --ink:#E8EAF1; --muted:#9AA0B2; --line:#2A2E3B;
+  --accent:#8FA2FF; --accent-soft:#222A4A;
+  --good:#6FD39C; --good-bg:#16301F; --warn:#F0B45F; --warn-bg:#33270F;
+  --bad:#FF8A7E; --bad-bg:#3A1714; --unk:#A5AABD; --unk-bg:#242836; --off:#2B2F3D;
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#0F1117; --surface:#171A23; --ink:#E8EAF1; --muted:#9AA0B2; --line:#2A2E3B;
+  --accent:#8FA2FF; --accent-soft:#222A4A;
+  --good:#6FD39C; --good-bg:#16301F; --warn:#F0B45F; --warn-bg:#33270F;
+  --bad:#FF8A7E; --bad-bg:#3A1714; --unk:#A5AABD; --unk-bg:#242836; --off:#2B2F3D;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:28px 60px}
+.wrap{max-width:1120px;margin:0 auto}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.eyebrow{font:600 11px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font-size:clamp(26px,3.6vw,40px);line-height:1.1;margin:10px 0 0;letter-spacing:-.015em;text-wrap:balance}
+.lede{color:var(--muted);max-width:70ch;margin:12px 0 0}
+.note{color:var(--muted);font-size:13px;margin:8px 0 0}
+.theme{flex:none;border:1px solid var(--line);background:var(--surface);color:var(--ink);
+  border-radius:999px;padding:6px 13px;font:13px var(--body);cursor:pointer}
+.theme:focus-visible,button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+section{margin-top:36px}
+h2{font-size:20px;margin:0 0 12px;letter-spacing:-.01em}
+a{color:var(--accent)}
+code,.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;min-width:0}
+.card .role{font:600 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.card .big{font-size:26px;font-weight:700;margin-top:4px;letter-spacing:-.01em}
+.card .name{font-weight:600;margin-top:2px}
+.card p{margin:6px 0 0;color:var(--muted);font-size:13px}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;vertical-align:top;padding:11px 12px;border-bottom:1px solid var(--line)}
+thead th{font:600 11px var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--muted);
+  position:sticky;top:0;background:var(--surface)}
+tbody tr:last-child td{border-bottom:0}
+th.sticky,td.sticky{position:sticky;left:0;background:var(--surface);box-shadow:1px 0 0 var(--line);z-index:1}
+thead th.sticky{z-index:2}
+.tools{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;margin:0 0 12px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;
+  padding:5px 12px;font:13px var(--body);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+select,input[type=search]{font:13px var(--body);background:var(--surface);color:var(--ink);
+  border:1px solid var(--line);border-radius:7px;padding:6px 9px}
+label.f{display:flex;gap:7px;align-items:center;font-size:13px;color:var(--muted)}
+.sub{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.empty{padding:22px;color:var(--muted);text-align:center}
+.callout{background:var(--surface);border-left:3px solid var(--accent);border-radius:8px;padding:14px 16px}
+.callout p{margin:0;max-width:72ch}
+footer{margin-top:44px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:12px}
+.chart{width:100%;height:auto}
+.chart .bar{fill:var(--accent)}
+.chart .axis{stroke:var(--line);stroke-width:1}
+.chart text{fill:var(--muted);font:11px var(--mono)}
+@media (max-width:600px){table{font-size:13px}th,td{padding:9px 8px}}
+@media print{body{background:#fff;color:#000}.theme,.tools{display:none}.table-wrap{overflow:visible}
+  thead th{position:static}th.sticky,td.sticky{position:static;box-shadow:none}section{break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div>
+      <div class="eyebrow">Claude Code · этот компьютер</div>
+      <h1>Расход токенов за октябрь</h1>
+    </div>
+    <button class="theme" type="button" aria-label="Сменить тему">Тема</button>
+  </div>
+  <p class="lede">Посчитано по журналам всех проектов на этом компьютере за 12 октября – 10 ноября.</p>
+  <p class="note">Чтение из кэша дано в миллиардах токенов, остальное в миллионах. Две недели монтажа дали около 90% месячного объёма.</p>
+
+  <section>
+    <h2>Итог за 30 дней</h2>
+    <div class="cards">
+      <div class="card"><div class="role">Запросов</div><div class="big">20 132</div><p>примерно 4 700 в неделю</p></div>
+      <div class="card"><div class="role">Чтение из кэша</div><div class="big">5,0 млрд</div><p>повторное чтение контекста</p></div>
+      <div class="card"><div class="role">Вывод</div><div class="big">10,7 млн</div><p>собственно ответы</p></div>
+      <div class="card"><div class="role">Запись в кэш</div><div class="big">121 млн</div><p>новый контекст</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>По неделям</h2>
+    <div data-table>
+      <div class="tools">
+        <input type="search" placeholder="Найти в таблице" aria-label="Найти в таблице">
+        <label class="f">Сортировать
+          <select data-sort aria-label="Сортировать">
+            <option value="">как есть</option>
+            <option value="calls" data-dir="desc">по запросам</option>
+            <option value="cr" data-dir="desc">по чтению из кэша</option>
+          </select>
+        </label>
+        <span class="note" data-count></span>
+      </div>
+      <div class="tools"><label class="f">Тип недели:</label>
+        <div class="chips">
+          <button type="button" class="chip" data-fkey="t" data-fval="" aria-pressed="true">Все</button>
+          <button type="button" class="chip" data-fkey="t" data-fval="рабочая" aria-pressed="false">Рабочие</button>
+          <button type="button" class="chip" data-fkey="t" data-fval="тихая" aria-pressed="false">Тихие</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th class="sticky">Неделя</th><th>Запросов</th><th>Чтение из кэша</th><th>Вывод</th></tr></thead>
+          <tbody>
+            <tr data-ft="рабочая" data-scalls="8001" data-scr="2081"><td class="sticky"><b>12–18 окт</b><span class="sub">монтаж</span></td><td class="mono">8 001</td><td class="mono">2,08 млрд</td><td class="mono">3,2 млн</td></tr>
+            <tr data-ft="рабочая" data-scalls="9857" data-scr="2409"><td class="sticky"><b>19–25 окт</b><span class="sub">монтаж, самая тяжёлая</span></td><td class="mono">9 857</td><td class="mono">2,41 млрд</td><td class="mono">5,7 млн</td></tr>
+            <tr data-ft="тихая" data-scalls="779" data-scr="216"><td class="sticky">26 окт – 1 ноя</td><td class="mono">779</td><td class="mono">0,22 млрд</td><td class="mono">0,7 млн</td></tr>
+            <tr data-ft="тихая" data-scalls="1124" data-scr="204"><td class="sticky">2–8 ноя<span class="sub">тесты локальных моделей</span></td><td class="mono">1 124</td><td class="mono">0,20 млрд</td><td class="mono">0,8 млн</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="empty" hidden>Под эти условия ничего не подошло.</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Чтение из кэша по неделям</h2>
+    <svg class="chart" viewBox="0 0 640 200" role="img" aria-label="Чтение из кэша по неделям, в миллиардах токенов">
+      <line class="axis" x1="40" y1="170" x2="620" y2="170"></line>
+      <rect class="bar" x="70"  y="25"  width="90" height="145"></rect>
+      <rect class="bar" x="210" y="8"   width="90" height="162"></rect>
+      <rect class="bar" x="350" y="158" width="90" height="12"></rect>
+      <rect class="bar" x="490" y="159" width="90" height="11"></rect>
+      <text x="80"  y="188">12–18</text><text x="220" y="188">19–25</text>
+      <text x="356" y="188">26–1</text><text x="494" y="188">2–8</text>
+      <text x="60"  y="15">2,08</text><text x="200" y="0">2,41</text>
+      <text x="348" y="150">0,22</text><text x="488" y="151">0,20</text>
+    </svg>
+    <p class="note">Значения над столбцами в миллиардах токенов.</p>
+  </section>
+
+  <section>
+    <div class="callout"><p>Почти весь расход это повторное чтение одного и того же контекста. Основной способ экономии при любой модели: урезать свод проекта до указателя, а правила раздать по файлам агентов.</p></div>
+  </section>
+
+  <footer>Страница собрана локально, открывается без интернета.</footer>
+</div>
+
+<script>
+(function(){
+  var root=document.documentElement, btn=document.querySelector('.theme');
+  function paint(){btn.textContent = root.getAttribute('data-theme')==='dark' ? 'Светлая тема' : 'Тёмная тема';}
+  try{var s=localStorage.getItem('page-theme'); if(s) root.setAttribute('data-theme',s);}catch(e){}
+  paint();
+  btn.addEventListener('click',function(){
+    var now = root.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme',now);
+    try{localStorage.setItem('page-theme',now);}catch(e){}
+    paint();
+  });
+  document.querySelectorAll('[data-table]').forEach(function(box){
+    var rows=[].slice.call(box.querySelectorAll('tbody tr')), state={}, q='';
+    var chips=[].slice.call(box.querySelectorAll('.chip[data-fkey]'));
+    var search=box.querySelector('input[type=search]'), sel=box.querySelector('select[data-sort]');
+    var count=box.querySelector('[data-count]'), empty=box.querySelector('.empty');
+    chips.forEach(function(c){c.addEventListener('click',function(){
+      var k=c.dataset.fkey, v=c.dataset.fval;
+      chips.forEach(function(o){ if(o.dataset.fkey===k) o.setAttribute('aria-pressed', String(o===c)); });
+      state[k]=v; apply();
+    });});
+    if(search) search.addEventListener('input',function(){ q=search.value.trim().toLowerCase(); apply(); });
+    if(sel) sel.addEventListener('change',function(){ apply(); });
+    function apply(){
+      var shown=0;
+      rows.forEach(function(r){
+        var ok=true;
+        for(var k in state){ if(state[k] && r.dataset['f'+k]!==state[k]) ok=false; }
+        if(ok && q && r.textContent.toLowerCase().indexOf(q)<0) ok=false;
+        r.hidden=!ok; if(ok) shown++;
+      });
+      if(sel && sel.value){
+        var key=sel.value, dir=sel.selectedOptions[0].dataset.dir==='asc'?1:-1;
+        rows.filter(function(r){return !r.hidden;}).sort(function(a,b){
+          var x=parseFloat(a.dataset['s'+key]), y=parseFloat(b.dataset['s'+key]);
+          if(isNaN(x))x=-1e9; if(isNaN(y))y=-1e9; return dir*(x-y);
+        }).forEach(function(r){ box.querySelector('tbody').appendChild(r); });
+      }
+      if(count) count.textContent='показано '+shown+' из '+rows.length;
+      if(empty) empty.hidden = shown!==0;
+    }
+    apply();
+  });
+})();
+</script>
+</body>
+</html>
