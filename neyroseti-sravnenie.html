@@ -1,0 +1,128 @@
+<!doctype html><html lang=ru><head><meta charset=utf-8><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Нейросети: сравнение</title><style>
+:root{--bg:#F4F5F7;--surface:#FFFFFF;--ink:#151824;--muted:#5B6070;--line:#DCDFE6;
+--accent:#2C47C9;--accent-soft:#E6EAFB;--good:#1E7A4C;--good-bg:#DCF1E4;
+--warn:#96580A;--warn-bg:#FBECD0;--bad:#B42318;--bad-bg:#FBE2DF;--unk:#5B6070;--unk-bg:#E8E9EF;
+--off:#E2E4EB;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+--body:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+--bg:#0F1117;--surface:#171A23;--ink:#E8EAF1;--muted:#9AA0B2;--line:#2A2E3B;
+--accent:#8FA2FF;--accent-soft:#222A4A;--good:#6FD39C;--good-bg:#16301F;
+--warn:#F0B45F;--warn-bg:#33270F;--bad:#FF8A7E;--bad-bg:#3A1714;--unk:#A5AABD;--unk-bg:#242836;
+--off:#2B2F3D;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0F1117;--surface:#171A23;--ink:#E8EAF1;--muted:#9AA0B2;--line:#2A2E3B;
+--accent:#8FA2FF;--accent-soft:#222A4A;--good:#6FD39C;--good-bg:#16301F;
+--warn:#F0B45F;--warn-bg:#33270F;--bad:#FF8A7E;--bad-bg:#3A1714;--unk:#A5AABD;--unk-bg:#242836;
+--off:#2B2F3D;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--body);
+padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+padding-block:28px 56px}
+.wrap{max-width:1180px;margin:0 auto}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.eyebrow{font:600 11px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font-size:clamp(25px,3.6vw,38px);line-height:1.12;margin:10px 0 0;letter-spacing:-.015em;text-wrap:balance}
+.lede{color:var(--muted);max-width:70ch;margin:12px 0 0}
+.note{color:var(--muted);font-size:13px;margin:8px 0 0}
+.theme{flex:none;border:1px solid var(--line);background:var(--surface);color:var(--ink);
+border-radius:999px;padding:6px 12px;font:13px var(--body);cursor:pointer}
+.theme:focus-visible,.chip:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+section{margin-top:34px}
+h2{font-size:19px;margin:0 0 12px;letter-spacing:-.01em}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;min-width:0}
+.card.main{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.card .role{font:600 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.card .name{font-weight:700;font-size:17px;margin-top:4px}
+.card p{margin:6px 0 0;color:var(--muted);font-size:14px}
+.tools{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;margin:0 0 12px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;
+padding:5px 12px;font:13px var(--body);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+select,input[type=search]{font:13px var(--body);background:var(--surface);color:var(--ink);
+border:1px solid var(--line);border-radius:7px;padding:6px 9px}
+input[type=search]{min-width:190px}
+label.f{display:flex;gap:7px;align-items:center;font-size:13px;color:var(--muted)}
+.tbox{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;vertical-align:top;padding:11px 12px;border-bottom:1px solid var(--line)}
+thead th{font:600 11px var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--muted);
+position:sticky;top:0;background:var(--surface)}
+tbody tr:last-child td{border-bottom:0}
+td.sticky,th.sticky{position:sticky;left:0;background:var(--surface);box-shadow:1px 0 0 var(--line);z-index:1}
+thead th.sticky{z-index:2}
+.cell b{display:block}
+.sub{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:13px}
+.segs{display:flex;gap:3px;margin-top:2px}
+.segs i{width:13px;height:8px;border-radius:2px;background:var(--off)}
+.segs i.on{background:var(--accent)}
+.pill{display:inline-block;font:600 12px/1.4 var(--body);padding:2px 9px;border-radius:999px}
+.pill.good{color:var(--good);background:var(--good-bg)}
+.pill.warn{color:var(--warn);background:var(--warn-bg)}
+.pill.bad{color:var(--bad);background:var(--bad-bg)}
+.pill.unk{color:var(--unk);background:var(--unk-bg)}
+.pill.plain{color:var(--ink);background:var(--accent-soft)}
+.empty{padding:22px;color:var(--muted);text-align:center}
+.txt p{margin:0 0 12px;max-width:72ch}
+.txt ul,.txt ol{margin:0 0 12px;padding-left:20px;max-width:72ch}
+.txt li{margin-bottom:6px}
+.txt code{font-family:var(--mono);font-size:.9em;background:var(--surface);border:1px solid var(--line);
+border-radius:4px;padding:1px 5px}
+ul.items{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+ul.items li{background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:11px 14px}
+ul.items .sub{margin-top:3px}
+.links a{color:var(--accent)}
+.callout{background:var(--surface);border-left:3px solid var(--accent);border-radius:8px;padding:14px 16px}
+.callout p{margin:0 0 8px;max-width:72ch}.callout p:last-child{margin:0}
+footer{margin-top:40px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:12px}
+@media (max-width:600px){.tbox{border-radius:8px}table{font-size:13px}th,td{padding:9px 8px}}
+@media print{body{background:#fff;color:#000}.theme,.tools{display:none}.tbox{overflow:visible}
+thead th{position:static}section{break-inside:avoid}}
+</style></head><body><div class=wrap><div class="top"><div><div class="eyebrow">Личный лист сравнения · ноябрь 2026</div><h1>Какую нейросеть брать</h1></div><button class=theme type=button aria-label="Сменить тему">Тема</button></div><p class="lede">Подписки около 100 долларов, дешёвые варианты и российские. Сравниваются цена, лимиты, русский текст, код, вёрстка, картинки, совместимость с Claude Code и риск работы из России.</p><p class="note">Страница лежит на диске и открывается без интернета. Оценки от 1 до 5 поставлены мной по найденному, это не замер.</p><section><h2>Что брать</h2><div class="cards"><div class="card main"><div class="role">Основной</div><div class="name">Claude Max, $100</div><p>Лучший русский текст и вёрстка, на нём стоит вся система: скиллы, агенты, хуки.</p></div><div class="card"><div class="role">Запасной</div><div class="name">DeepSeek по API</div><p>Подключается под Claude Code, пока не пользуешься, денег не списывает.</p></div><div class="card"><div class="role">Без риска</div><div class="name">GigaChat</div><p>Работает в рублях, бесплатный лимит до июля 2027. Для черновой механики.</p></div><div class="card"><div class="role">Картинки</div><div class="name">Gemini AI Ultra, $99.99</div><p>Генерация картинок и видео для роликов. Россию Google не поддерживает.</p></div></div></section><section><h2>Все варианты</h2><div data-table><div class="tools"><input type="search" placeholder="Найти в таблице"><label class="f">Сортировать <select data-sort><option value="">как есть</option><option value="ru" data-dir="desc">русский текст</option><option value="code" data-dir="desc">код</option><option value="ui" data-dir="desc">вёрстку</option><option value="risk" data-dir="desc">риск</option><option value="price" data-dir="asc">цену (сначала дешёвые)</option></select></label><span class="note" data-count></span></div><div class="tools"><label class="f">Группа:</label><div class="chips"><button type="button" class="chip" data-fkey="group" data-fval="Западные" aria-pressed="false">Западные</button><button type="button" class="chip" data-fkey="group" data-fval="Китайские" aria-pressed="false">Китайские</button><button type="button" class="chip" data-fkey="group" data-fval="Российские" aria-pressed="false">Российские</button><button type="button" class="chip" data-fkey="group" data-fval="" aria-pressed="true">Все</button></div></div><div class="tbox" style="margin-top:12px"><table><thead><tr><th class=sticky>Сервис</th><th>Цена в месяц</th><th>Лимиты</th><th>Русский текст</th><th>Код, агент</th><th>Вёрстка</th><th>Картинки</th><th>Под Claude Code</th><th>Риск из РФ</th><th>Роль</th></tr></thead><tbody><tr data-fgroup="Западные" data-sru="5" data-scode="5" data-sui="5" data-srisk="3" data-sprice="100"><td class="sticky">Claude Max 5x<span class="sub">Anthropic</span></td><td class="mono">$100<span class="sub">есть $200</span></td><td>Окно 5 часов плюс недельный потолок. Цифр нет.</td><td><b>лучший</b><span class="segs" title="5 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></td><td><b>верх</b><span class="segs" title="5 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></td><td><b>верх</b><span class="segs" title="5 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></td><td>нет</td><td>родной</td><td><span class="pill bad">высокий</span><span class="sub">волны банов в 2026</span></td><td><b>Основной</b></td></tr><tr data-fgroup="Западные" data-sru="4" data-scode="5" data-sui="4" data-srisk="3" data-sprice="100"><td class="sticky">ChatGPT Pro<span class="sub">OpenAI</span></td><td class="mono">$100<span class="sub">есть $200 и $500</span></td><td>5x от Plus, только недельный. Цифр нет.</td><td><b>суше</b><span class="segs" title="4 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i></span></td><td><b>верх</b><span class="segs" title="5 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></td><td><b>хорошо</b><span class="segs" title="4 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i></span></td><td>картинки</td><td>нет, свой Codex</td><td><span class="pill bad">высокий</span><span class="sub">Россия не поддерживается</span></td><td>Не нужен</td></tr><tr data-fgroup="Западные" data-sru="4" data-scode="4" data-sui="4" data-srisk="3" data-sprice="99"><td class="sticky">Gemini AI Ultra<span class="sub">Google</span></td><td class="mono">$99.99<span class="sub">$199.99 за 20x</span></td><td>Считается по вычислениям, окно 5 часов плюс неделя.</td><td><b>хорошо</b><span class="segs" title="4 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i></span></td><td><b>сильно</b><span class="segs" title="4 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i></span></td><td><b>хорошо</b><span class="segs" title="4 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i></span></td><td>картинки и видео</td><td>нет, свой Antigravity</td><td><span class="pill bad">высокий</span><span class="sub">только посредники</span></td><td>Если нужны картинки</td></tr><tr data-fgroup="Западные" data-sru="3" data-scode="4" data-sui="3" data-srisk="3" data-sprice="100"><td class="sticky">Grok Super<span class="sub">xAI</span></td><td class="mono">$100<span class="sub">через подписку X</span></td><td>Не публикуются.</td><td><b>средне</b><span class="segs" title="3 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i></span></td><td><b>хорошо</b><span class="segs" title="4 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i></span></td><td><b>средне</b><span class="segs" title="3 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i></span></td><td>картинки и видео</td><td>нет</td><td><span class="pill bad">высокий</span><span class="sub">X заблокирован в РФ</span></td><td>Не брать</td></tr><tr data-fgroup="Западные" data-sru="3" data-scode="3" data-sui="2" data-srisk="2" data-sprice="15"><td class="sticky">Mistral Vibe Pro<span class="sub">Франция</span></td><td class="mono">$14.99<span class="sub">бывший Le Chat</span></td><td>Честное использование без цифр.</td><td><b>средне</b><span class="segs" title="3 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i></span></td><td><b>средне</b><span class="segs" title="3 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i></span></td><td><b>слабо</b><span class="segs" title="2 из 5"><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i></span></td><td>картинки</td><td>нет</td><td><span class="pill unk">нет данных</span><span class="sub">не проверял</span></td><td>Не брать</td></tr><tr data-fgroup="Китайские" data-sru="3" data-scode="3" data-sui="4" data-srisk="2" data-sprice="99"><td class="sticky">Kimi Max<span class="sub">Moonshot</span></td><td class="mono">$99<span class="sub">$79 за год</span></td><td>Общий пул кредитов на чат и код.</td><td><b>прилично</b><span class="segs" title="3 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i></span></td><td><b>второй эшелон</b><span class="segs" title="3 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i></span></td><td><b>хорошо</b><span class="segs" title="4 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i></span></td><td>нет</td><td>да</td><td><span class="pill unk">нет данных</span></td><td>Входит в Qwen Plan</td></tr><tr data-fgroup="Китайские" data-sru="2" data-scode="3" data-sui="2" data-srisk="2" data-sprice="50"><td class="sticky">Qwen Coding Plan<span class="sub">Alibaba</span></td><td class="mono">$50<span class="sub">внутри Kimi, GLM, MiniMax</span></td><td>45 000 запросов в неделю, 90 000 в месяц.</td><td><b>слабо</b><span class="segs" title="2 из 5"><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i></span></td><td><b>второй эшелон</b><span class="segs" title="3 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i></span></td><td><b>слабо</b><span class="segs" title="2 из 5"><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i></span></td><td>в чате</td><td>да</td><td><span class="pill warn">средний</span><span class="sub">карта не проходит</span></td><td>Запасной по подписке</td></tr><tr data-fgroup="Китайские" data-sru="3" data-scode="4" data-sui="3" data-srisk="2" data-sprice="18"><td class="sticky">GLM Coding Plan<span class="sub">Zhipu</span></td><td class="mono">$18 / $168<span class="sub">Lite, Pro, Max</span></td><td>Около 80, 400 и 1 600 запросов за 5 часов.</td><td><b>средне</b><span class="segs" title="3 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i></span></td><td><b>сильно</b><span class="segs" title="4 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i></span></td><td><b>средне</b><span class="segs" title="3 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i></span></td><td>нет</td><td>да</td><td><span class="pill unk">нет данных</span></td><td>Дешёвый запасной</td></tr><tr data-fgroup="Китайские" data-sru="3" data-scode="3" data-sui="3" data-srisk="2" data-sprice="20"><td class="sticky">DeepSeek<span class="sub">по токенам</span></td><td class="mono">за расход<span class="sub">ночью вдвое дешевле</span></td><td>Ограничен только деньгами.</td><td><b>прилично</b><span class="segs" title="3 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i></span></td><td><b>неплохо</b><span class="segs" title="3 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i></span></td><td><b>неплохо</b><span class="segs" title="3 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i></span></td><td>нет</td><td>да</td><td><span class="pill warn">средний</span><span class="sub">карта не проходит</span></td><td><b>Запасной</b></td></tr><tr data-fgroup="Российские" data-sru="3" data-scode="1" data-sui="1" data-srisk="0" data-sprice="0"><td class="sticky">GigaChat<span class="sub">Сбер</span></td><td class="mono">0 ₽<span class="sub">Freemium до 23.07.2027</span></td><td>Ultra 50 млн, Max 25 млн, Pro 40 млн, Lite 250 млн токенов, 1 поток.</td><td><b>естественный</b><span class="segs" title="3 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i></span></td><td><b>слабо</b><span class="segs" title="1 из 5"><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></span></td><td><b>слабо</b><span class="segs" title="1 из 5"><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></span></td><td>Kandinsky</td><td>через gpt2giga</td><td><span class="pill good">риска нет</span></td><td>Механика без риска</td></tr><tr data-fgroup="Российские" data-sru="3" data-scode="1" data-sui="1" data-srisk="0" data-sprice="7"><td class="sticky">Алиса AI<span class="sub">Яндекс</span></td><td class="mono">≈ 650 ₽<span class="sub">Плюс и опция</span></td><td>Обещают без ограничений.</td><td><b>бытовой</b><span class="segs" title="3 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i></span></td><td><b>слабо</b><span class="segs" title="1 из 5"><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></span></td><td><b>слабо</b><span class="segs" title="1 из 5"><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></span></td><td>картинки</td><td>нет</td><td><span class="pill good">риска нет</span></td><td>Не для работы</td></tr></tbody></table></div><div class="empty" hidden>Под эти условия ничего не подошло.</div></div></section><section><h2>Оговорки</h2><ul class="items"><li>Лимиты почти никто не публикует.<span class="sub">Цифры есть только у Qwen. Свой реальный лимит видно в кабинете.</span></li><li>Цены из сторонних обзоров за октябрь и ноябрь 2026.<span class="sub">Перед покупкой сверить на официальной странице.</span></li><li>Оценки качества это мои оценки по найденному, не замер.<span class="sub">Единого надёжного рейтинга по русскому тексту нет.</span></li><li>Российская карта не проходит у всех зарубежных и китайских.<span class="sub">Нужна карта с иностранным BIN или посредник.</span></li></ul></section><section><div class="callout"><h2>Как переключать мозги</h2><p>Claude Code это программа, модель за ней меняется через CC Switch: иконка в строке меню, выбор провайдера, новый чат. Скиллы, агенты и хуки работают с любой моделью.</p></div></section><footer>Страница собрана локально, открывается без интернета.</footer></div><script>
+(function(){
+var root=document.documentElement,t=document.querySelector('.theme');
+function paint(){var s=root.getAttribute('data-theme');
+t.textContent=s==='dark'?'Светлая тема':'Тёмная тема';}
+try{var s=localStorage.getItem('stranica-theme');if(s)root.setAttribute('data-theme',s);}catch(e){}
+paint();
+t.addEventListener('click',function(){
+ var now=root.getAttribute('data-theme')==='dark'?'light':'dark';
+ root.setAttribute('data-theme',now);try{localStorage.setItem('stranica-theme',now);}catch(e){}paint();});
+document.querySelectorAll('[data-table]').forEach(function(box){
+ var rows=[].slice.call(box.querySelectorAll('tbody tr')),fstate={},q='';
+ var chips=[].slice.call(box.querySelectorAll('.chip[data-fkey]'));
+ var search=box.querySelector('input[type=search]'),sel=box.querySelector('select[data-sort]');
+ var count=box.querySelector('[data-count]');
+ var empty=box.querySelector('.empty');
+ chips.forEach(function(c){c.addEventListener('click',function(){
+  var k=c.dataset.fkey,v=c.dataset.fval;
+  chips.forEach(function(o){if(o.dataset.fkey===k)o.setAttribute('aria-pressed',String(o===c));});
+  fstate[k]=v;apply();});});
+ if(search)search.addEventListener('input',function(){q=search.value.trim().toLowerCase();apply();});
+ if(sel)sel.addEventListener('change',function(){apply();});
+ function apply(){
+  var shown=0;
+  rows.forEach(function(r){
+   var ok=true;
+   for(var k in fstate){if(fstate[k]&&r.dataset['f'+k]!==fstate[k])ok=false;}
+   if(ok&&q&&r.textContent.toLowerCase().indexOf(q)<0)ok=false;
+   r.hidden=!ok;if(ok)shown++;
+  });
+  if(sel&&sel.value){
+   var key=sel.value;
+   var vis=rows.filter(function(r){return !r.hidden;});
+   var dir=sel.selectedOptions[0].dataset.dir==='asc'?1:-1;
+   vis.sort(function(a,b){
+    var x=parseFloat(a.dataset['s'+key]),y=parseFloat(b.dataset['s'+key]);
+    if(isNaN(x))x=-1e9;if(isNaN(y))y=-1e9;return dir*(x-y);});
+   var tb=box.querySelector('tbody');
+   vis.forEach(function(r){tb.appendChild(r);});
+  }
+  if(count)count.textContent='показано '+shown+' из '+rows.length;
+  if(empty)empty.hidden=shown!==0;
+ }
+ apply();
+});
+})();
+</script></body></html>
